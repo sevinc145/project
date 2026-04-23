@@ -5,7 +5,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float aspect = iResolution.x / iResolution.y;
     ndc.x *= aspect;
 
-    // --- MOUSE ILE KAMERA IDAREETMESI ---
     vec2 mouse = iMouse.xy / iResolution.xy;
     if(iMouse.z <= 0.0) mouse = vec2(0.5, 0.4);
     float angleX = (mouse.x - 0.5) * 6.28;
@@ -20,7 +19,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float reflectionWeight = 1.0;
     vec3 lightPos = vec3(2.0, 4.0, 2.0);
 
-    // --- RAY TRACING LOOP ---
     for (int i = 0; i < 3; i++) {
         float t = 1e10;
         vec3 normal, hitPos, objCol;
@@ -53,7 +51,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             }
         }
 
-        // Sahat doseme (Sənin kodundakı y = -0.5 seviyyesi)
+
         float tP = -(ro.y + 0.5) / rd.y;
         if (tP > 0.001 && tP < t) {
             t = tP; hitPos = ro + t * rd; normal = vec3(0.0, 1.0, 0.0);
@@ -66,11 +64,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             break;
         }
 
-        // --- SENIN KODUNDAKI KOLGE VE ISIQ MENTIQI ---
+
         vec3 L = normalize(lightPos - hitPos);
         float shadow = 1.0;
         
-        // Kure 1-in kolgesi
+
         vec3 soc1 = (hitPos + normal * 0.01) - s1P;
         if(pow(dot(soc1, L), 2.0) - (dot(soc1, soc1) - s1R*s1R) > 0.0) shadow = 0.2;
         // Kure 2-nin kolgesi
@@ -79,10 +77,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         float diff = max(dot(normal, L), 0.0);
         
-        // Senin orijinal renk hesablama formulun
+
         finalColor += (objCol * diff * shadow + 0.1) * reflectionWeight;
 
-        // --- EKS OLUNMA VE SEFFAFLIQ ---
         if(isGlass) {
             reflectionWeight *= 0.5; 
             rd = refract(rd, normal, 1.0/1.2); // Seffafliq ucun isiq sinmasi
