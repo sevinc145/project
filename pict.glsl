@@ -82,10 +82,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         if(isGlass) {
             reflectionWeight *= 0.5; 
-            rd = refract(rd, normal, 1.0/1.2); // Seffafliq ucun isiq sinmasi
+            rd = refract(rd, normal, 1.0/1.2); 
             ro = hitPos - normal * 0.01;
         } else {
-            reflectionWeight *= 0.4; // Doseme ucun eks olunma
+            reflectionWeight *= 0.4; 
             rd = reflect(rd, normal);
             ro = hitPos + normal * 0.01;
         }
